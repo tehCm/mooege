@@ -66,7 +66,11 @@ namespace Mooege.Net.GS
                 while ((end - _incomingBuffer.Position) >= 9)
                 {
                     GameMessage message = _incomingBuffer.ParseMessage();
-                    if (message == null) continue;
+                    if (message == null)
+                    {
+                        // if the message isnt parsed then something is off somewhere and it aint good, continuing will only lead to additional failure, probably best to disconnect the client /cm
+                        break;
+                    }
                     try
                     {
                         if (message.Consumer != Consumers.None) this.Universe.Route(this, message);
